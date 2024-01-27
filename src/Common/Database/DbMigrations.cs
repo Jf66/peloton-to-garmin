@@ -17,13 +17,11 @@ public class DbMigrations : IDbMigrations
 
 	private readonly ISettingsDb _settingsDb;
 	private readonly IUsersDb _usersDb;
-	private readonly ISyncStatusDb _syncStatusDb;
 
-	public DbMigrations(ISettingsDb settingsDb, IUsersDb usersDb, ISyncStatusDb syncStatusDb)
+	public DbMigrations(ISettingsDb settingsDb, IUsersDb usersDb)
 	{
 		_settingsDb = settingsDb;
 		_usersDb = usersDb;
-		_syncStatusDb = syncStatusDb;
 	}
 
 	public async Task PreformMigrations()
@@ -60,15 +58,6 @@ public class DbMigrations : IDbMigrations
 		catch (Exception e)
 		{
 			_logger.Error(e, "[MIGRATION] Failed to migrate existing data to Admin user.");
-		}
-
-		try
-		{
-			await _syncStatusDb!.DeleteLegacySyncStatusAsync();
-		}
-		catch (Exception e)
-		{
-			_logger.Warning(e, "[MIGRATION Failed to delete LegacySyncStatus.");
 		}
 		#pragma warning restore CS0612 // Type or member is obsolete
 	}
